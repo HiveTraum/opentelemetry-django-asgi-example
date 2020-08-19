@@ -1,0 +1,41 @@
+version: '3.6'
+
+services:
+  uvicorn:
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    command: ["/bin/bash", "-c", "uvicorn example.asgi:application --host 0.0.0.0"]
+
+    ports:
+      - 8000:8000
+
+    environment:
+      OTEL_DJANGO_INSTRUMENT: "True"
+
+  daphne:
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    command: ["/bin/bash", "-c", "daphne example.asgi:application -b 0.0.0.0"]
+
+    ports:
+      - 8001:8000
+
+    environment:
+      OTEL_DJANGO_INSTRUMENT: "True"
+
+  hypercorn:
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    command: ["/bin/bash", "-c", "hypercorn example.asgi:application -b 0.0.0.0"]
+
+    ports:
+      - 8002:8000
+
+    environment:
+      OTEL_DJANGO_INSTRUMENT: "True"
